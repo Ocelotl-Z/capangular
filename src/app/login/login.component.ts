@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { LoginService } from '../services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,16 +10,36 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 })
 export class LoginComponent {
   formLogin?: FormGroup;
+  isLoading: boolean = false;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private loginSrv: LoginService,
+    private router: Router
+  ) {
     this.formLogin = this.formBuilder.group({
-      username: ['', Validators.required],
+      email: ['', Validators.required, Validators.email],
       password: ['', Validators.required],
     });
   }
 
   loginClick() {
-    alert(this.formLogin?.get(['username'])?.value);
+    this.isLoading = true;
     console.log(this.formLogin?.value);
+
+    this.loginSrv.login(this.formLogin?.value).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.router.navigate(['home']);
+      },
+      error: (err) => {
+        console.log(err);
+        this.isLoading = false;
+      },
+      complete: () => {
+        console.log('Complete');
+        this.isLoading = false;
+      },
+    });
   }
 }
