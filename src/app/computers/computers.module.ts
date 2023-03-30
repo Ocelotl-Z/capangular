@@ -8,6 +8,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -15,7 +16,11 @@ import { NewComputersComponent } from './new-computers/new-computers.component';
 import { EditComputerComponent } from './edit-computer/edit-computer.component';
 
 @NgModule({
-  declarations: [ComputersComponent, NewComputersComponent, EditComputerComponent],
+  declarations: [
+    ComputersComponent,
+    NewComputersComponent,
+    EditComputerComponent,
+  ],
   imports: [
     CommonModule,
     ComputersRoutingModule,
@@ -24,6 +29,7 @@ import { EditComputerComponent } from './edit-computer/edit-computer.component';
     MatIconModule,
     MatInputModule,
     ReactiveFormsModule,
+    MatChipsModule,
   ],
 })
 export class ComputersModule {}

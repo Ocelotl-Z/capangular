@@ -1,1 +1,25 @@
-<p>edit-computer works!</p>
+<div class="container">
+  <h2>ID: {{ computerId }}</h2>
+  <mat-form-field>
+    <mat-label>Marca</mat-label>
+    <input
+      matInput
+      placeholder="{{ computer?.brand }}"
+      value="{{ computer?.brand }}"
+    />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Modelo</mat-label>
+    <input
+      matInput
+      placeholder="{{ computer?.model }}"
+      value="{{ computer?.model }}"
+    />
+  </mat-form-field>
+
+  <button mat-fab extended color="primary" class="fit-btn">
+    <mat-icon>save</mat-icon>
+    Actualizar
+  </button>
+</div>

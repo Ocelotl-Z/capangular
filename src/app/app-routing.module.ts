@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
     path: 'computers',
+    canActivate: [AuthService],
     loadChildren: () =>
       import('./computers/computers.module').then((m) => m.ComputersModule),
   },

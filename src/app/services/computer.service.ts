@@ -21,4 +21,12 @@ export class ComputerService {
   deleteComputer(id: number) {
     return this.http.delete(this.baseUrl + '/computers/' + id);
   }
+
+  getByID(id: number) {
+    return this.http.get<Computer>(this.baseUrl + '/computers/' + id);
+  }
+
+  patchComputer(id: number, req: Computer) {
+    return this.http.patch(this.baseUrl + '/computers/' + id, req);
+  }
 }
