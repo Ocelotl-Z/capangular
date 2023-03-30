@@ -12,9 +12,10 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { NewComputersComponent } from './new-computers/new-computers.component';
+import { EditComputerComponent } from './edit-computer/edit-computer.component';
 
 @NgModule({
-  declarations: [ComputersComponent, NewComputersComponent],
+  declarations: [ComputersComponent, NewComputersComponent, EditComputerComponent],
   imports: [
     CommonModule,
     ComputersRoutingModule,
