@@ -2,13 +2,21 @@
   "users": [
     {
       "id": 1,
-      "email": "ocelotlz123@gmail.com",
+      "email": "some@email.com",
       "password": "12345",
       "token": "holasoyuntoken123"
     }
   ],
   "computers": [
-    { "id": 1, "brand": "Razer", "model": "Blade 17" },
-    { "id": 1, "brand": "Asus", "model": "Zen 17" }
+    {
+      "id": 1,
+      "brand": "Razer",
+      "model": "Blade 17"
+    },
+    {
+      "id": 2,
+      "brand": "Asus",
+      "model": "Zen 17"
+    }
   ]
 }

@@ -13,4 +13,12 @@ export class ComputerService {
   getComputers() {
     return this.http.get<Computer[]>(this.baseUrl + '/computers');
   }
+
+  saveComputer(req: Computer) {
+    return this.http.post(this.baseUrl + '/computers', req);
+  }
+
+  deleteComputer(id: number) {
+    return this.http.delete(this.baseUrl + '/computers/' + id);
+  }
 }

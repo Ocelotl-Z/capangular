@@ -9,16 +9,31 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./computers.component.css'],
 })
 export class ComputersComponent {
-  displayedColumns: string[] = ['id', 'model', 'brand'];
+  displayedColumns: string[] = ['id', 'model', 'brand', 'actions'];
   computers = new MatTableDataSource<Computer>();
 
   constructor(private computerSrv: ComputerService) {
+    this.loadData();
+  }
+
+  loadData() {
     this.computerSrv.getComputers().subscribe({
       next: (list) => {
         this.computers.data = list;
       },
       error: (err) => {
         alert('Upss');
+      },
+    });
+  }
+
+  deleteComputer(item: Computer) {
+    this.computerSrv.deleteComputer(item.id!).subscribe({
+      next: () => {
+        this.loadData();
+      },
+      error(err) {
+        alert(err);
       },
     });
   }
