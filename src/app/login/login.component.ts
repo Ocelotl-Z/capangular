@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { LoginService } from '../services/login.service';
 import { Router } from '@angular/router';
+import { UtilService } from '../services/util.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,8 @@ export class LoginComponent {
   constructor(
     private formBuilder: FormBuilder,
     private loginSrv: LoginService,
-    private router: Router
+    private router: Router,
+    private util: UtilService
   ) {
     this.formLogin = this.formBuilder.group({
       email: ['', Validators.required, Validators.email],
@@ -30,9 +32,11 @@ export class LoginComponent {
     this.loginSrv.login(this.formLogin?.value).subscribe({
       next: (response) => {
         console.log(response);
+        this.util.saveToken(response.token);
         this.router.navigate(['home']);
       },
       error: (err) => {
+        alert('Credenciales Invalidas');
         console.log(err);
         this.isLoading = false;
       },
