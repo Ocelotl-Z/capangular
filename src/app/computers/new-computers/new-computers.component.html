@@ -1,1 +1,23 @@
-<p>new-computers works!</p>
+<div class="container" *ngIf="formComputer" [formGroup]="formComputer">
+  <mat-form-field>
+    <mat-label>Marca</mat-label>
+    <input
+      matInput
+      type="text"
+      placeholder="Ex: Asus"
+      formControlName="brand"
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Modelo</mat-label>
+    <input matInput type="text" formControlName="model" />
+  </mat-form-field>
+  <button
+    mat-stroked-button
+    color="primary"
+    [disabled]="formComputer.invalid || isLoading"
+    (click)="createComputer()"
+  >
+    Log In
+  </button>
+</div>

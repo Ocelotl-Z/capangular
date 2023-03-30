@@ -5,10 +5,24 @@ import { ComputersRoutingModule } from './computers-routing.module';
 import { ComputersComponent } from './computers.component';
 
 import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+
+import { ReactiveFormsModule } from '@angular/forms';
+
 import { NewComputersComponent } from './new-computers/new-computers.component';
 
 @NgModule({
   declarations: [ComputersComponent, NewComputersComponent],
-  imports: [CommonModule, ComputersRoutingModule, MatTableModule],
+  imports: [
+    CommonModule,
+    ComputersRoutingModule,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    ReactiveFormsModule,
+  ],
 })
 export class ComputersModule {}
