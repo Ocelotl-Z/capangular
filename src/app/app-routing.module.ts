@@ -10,6 +10,11 @@ const routes: Routes = [
   { path: 'users', canActivate: [AuthService], component: UsersComponent },
   { path: 'login', component: LoginComponent },
   {
+    path: 'computers',
+    loadChildren: () =>
+      import('./computers/computers.module').then((m) => m.ComputersModule),
+  },
+  {
     path: '**',
     redirectTo: '/home',
   },
