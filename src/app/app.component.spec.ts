@@ -5,8 +5,18 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UtilService } from './services/util.service';
 import { Subject } from 'rxjs';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'login',
+  template: '<span>Login</span>',
+})
+class MockingLoginComponent {}
 
 describe('AppComponent', () => {
+  let routerSpy = jasmine.createSpyObj<Router>('Router', ['navigate']);
+
   let utilSvcSpy = jasmine.createSpyObj<UtilService>('UtilService', [
     'getToken',
     'deleteToken',
@@ -19,13 +29,16 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes([
-          { path: 'login', redirectTo: '' },
+          { path: 'login', component: MockingLoginComponent },
         ]),
         BrowserAnimationsModule,
         MatToolbarModule,
       ],
       declarations: [AppComponent],
-      providers: [{ provide: UtilService, useValue: utilSvcSpy }],
+      providers: [
+        { provide: UtilService, useValue: utilSvcSpy },
+        { provide: Router, useValue: routerSpy },
+      ],
     }).compileComponents();
   });
 
@@ -74,5 +87,6 @@ describe('AppComponent', () => {
     app.logout();
 
     expect(utilSvcSpy.deleteToken).toHaveBeenCalled();
+    expect(routerSpy.navigate).toHaveBeenCalledOnceWith(['login']);
   });
 });
