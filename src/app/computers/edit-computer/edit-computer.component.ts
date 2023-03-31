@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Computer } from 'src/app/model/computer.model';
 import { ComputerService } from 'src/app/services/computer.service';
 
@@ -10,11 +11,13 @@ import { ComputerService } from 'src/app/services/computer.service';
 })
 export class EditComputerComponent {
   computerId: number = 0;
-
+  formComputer?: FormGroup;
   computer?: Computer;
 
   constructor(
+    private fb: FormBuilder,
     private route: ActivatedRoute,
+    private router: Router,
     private computerSrv: ComputerService
   ) {
     this.route.params.subscribe({
@@ -23,14 +26,29 @@ export class EditComputerComponent {
         this.computerSrv.getByID(this.computerId).subscribe({
           next: (data) => {
             this.computer = data;
+            this.formComputer = this.fb.group({
+              brand: [data.brand, Validators.required],
+              model: [data.model, Validators.required],
+            });
           },
-          error(err) {
-            alert(err);
+          error() {
+            alert('No se encontro el producto');
           },
         });
       },
     });
   }
 
-  updateComputer() {}
+  updateComputer() {
+    this.computerSrv
+      .patchComputer(this.computerId, this.formComputer?.value)
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/computers']);
+        },
+        error() {
+          alert('Error al actualizar');
+        },
+      });
+  }
 }
