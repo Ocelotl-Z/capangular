@@ -184,4 +184,108 @@ describe('ComputerService', () => {
   ));
 
   // TAREA GET BY ID && DELETE
+
+  // GET BY ID
+  it('should http get by id ok', inject(
+    [HttpTestingController],
+    (httpMock: HttpTestingController) => {
+      const comp: Computer = {
+        id: 1,
+        brand: 'Asus',
+        model: '17B',
+      };
+      const obs = service.getByID(1);
+
+      expect(obs instanceof Observable).toBeTrue();
+
+      obs.subscribe({
+        next(value) {
+          expect(value).toBeDefined;
+          expect(value.id).toBe(comp.id);
+          expect(value.brand).toBe(comp.brand);
+          expect(value.model).toBe(comp.model);
+        },
+      });
+
+      const request = httpMock.expectOne(
+        'http://localhost:3000/computers/' + comp.id
+      );
+      expect(request.request.method).toBe('GET');
+
+      request.flush(comp);
+    }
+  ));
+
+  it('should http get by id error', inject(
+    [HttpTestingController],
+    (httpMock: HttpTestingController) => {
+      const comp: Computer = {
+        id: 1,
+        brand: 'Asus',
+        model: '17B',
+      };
+      const obs = service.getByID(1);
+
+      expect(obs instanceof Observable).toBeTrue();
+
+      obs.subscribe({
+        error(err) {
+          expect(err.error.type).toBe('computadora no encontrada');
+        },
+      });
+
+      const request = httpMock.expectOne(
+        'http://localhost:3000/computers/' + comp.id
+      );
+      expect(request.request.method).toBe('GET');
+
+      request.error(new ErrorEvent('computadora no encontrada'));
+    }
+  ));
+
+  // DELETE
+
+  it('should http delete ok', inject(
+    [HttpTestingController],
+    (httpMock: HttpTestingController) => {
+      const obs = service.deleteComputer(1);
+
+      expect(obs instanceof Observable).toBeTrue();
+
+      obs.subscribe({
+        next(value) {
+          expect(value).toBeDefined;
+        },
+      });
+
+      const request = httpMock.expectOne(
+        'http://localhost:3000/computers/' + 1
+      );
+      expect(request.request.method).toBe('DELETE');
+
+      request.flush({});
+    }
+  ));
+
+  it('should http delete error', inject(
+    [HttpTestingController],
+    (httpMock: HttpTestingController) => {
+      const obs = service.deleteComputer(1);
+
+      expect(obs instanceof Observable).toBeTrue();
+
+      obs.subscribe({
+        error(err) {
+          expect(err.error.type).toBe('error al borrar');
+        },
+      });
+
+      const request = httpMock.expectOne(
+        'http://localhost:3000/computers/' + 1
+      );
+      expect(request.request.method).toBe('DELETE');
+
+      request.error(new ErrorEvent('error al borrar'));
+    }
+  ));
 });

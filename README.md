@@ -3,5 +3,5 @@
 ## TODO
 
 - [x] PATCH de computers
-- [ ] Completar TEST ComputersServices
+- [x] Completar TEST ComputersServices
 - [ ] Completar TEST ComputersModules
