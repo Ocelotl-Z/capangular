@@ -12,9 +12,9 @@ export class AppComponent {
 
   isLogged = false;
 
-  constructor(private util: UtilService, private router: Router) {
-    this.isLogged = Boolean(util.getToken());
-    this.util.isLogged.subscribe({
+  constructor(private utilSvcSpy: UtilService, private router: Router) {
+    this.isLogged = Boolean(utilSvcSpy.getToken());
+    this.utilSvcSpy.isLogged.subscribe({
       next: (value) => {
         this.isLogged = value;
       },
@@ -22,7 +22,7 @@ export class AppComponent {
   }
 
   logout() {
-    this.util.deleteToken();
+    this.utilSvcSpy.deleteToken();
     this.router.navigate(['login']);
   }
 }
