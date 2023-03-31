@@ -25,17 +25,21 @@ export class EditComputerComponent {
         this.computerId = params['id'];
         this.computerSrv.getByID(this.computerId).subscribe({
           next: (data) => {
-            this.computer = data;
-            this.formComputer = this.fb.group({
-              brand: [data.brand, Validators.required],
-              model: [data.model, Validators.required],
-            });
+            this.loadData(data);
           },
-          error() {
+          error: (err) => {
             alert('No se encontro el producto');
           },
         });
       },
+    });
+  }
+
+  loadData(data: Computer) {
+    this.computer = data;
+    this.formComputer = this.fb.group({
+      brand: [data.brand, Validators.required],
+      model: [data.model, Validators.required],
     });
   }
 

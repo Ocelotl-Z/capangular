@@ -25,15 +25,13 @@ export class NewComputersComponent {
 
   createComputer() {
     this.isLoading = true;
-    console.log(this.formComputer?.value);
 
     this.computerSrv.saveComputer(this.formComputer?.value).subscribe({
       next: (value) => {
-        console.log(value);
         this.router.navigate(['/computers']);
       },
-      error(err) {
-        console.log(err);
+      error: (err) => {
+        alert(err);
       },
     });
   }

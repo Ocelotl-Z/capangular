@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ComputerService } from 'src/app/services/computer.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NEVER, of, throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 describe('NewComputersComponent', () => {
   let component: NewComputersComponent;
@@ -17,17 +19,22 @@ describe('NewComputersComponent', () => {
     ['saveComputer']
   );
 
+  let routerSpy = jasmine.createSpyObj<Router>('Router', ['navigate']);
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [NewComputersComponent],
       imports: [
-        RouterTestingModule,
+        RouterTestingModule.withRoutes([{ path: 'computers', redirectTo: '' }]),
         MatInputModule,
         MatButtonModule,
         ReactiveFormsModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
       ],
-      providers: [{ provide: ComputerService, useValue: computerSvcSpy }],
+      providers: [
+        { provide: ComputerService, useValue: computerSvcSpy },
+        { provide: Router, useValue: routerSpy },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NewComputersComponent);
@@ -37,5 +44,31 @@ describe('NewComputersComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+    expect(component.formComputer).toBeTruthy();
+  });
+
+  it('should create Computer', () => {
+    const mockResponse = {
+      token: 'HolaSoyUnToken',
+    };
+    computerSvcSpy.saveComputer.and.returnValue(of([]));
+
+    component.formComputer?.patchValue({
+      brand: 'ASUS',
+      model: 'ROG',
+    });
+
+    component.createComputer();
+
+    expect(component.isLoading).toBeTrue();
+    expect(routerSpy.navigate).toHaveBeenCalledOnceWith(['/computers']);
+  });
+
+  it('should create Computer error', () => {
+    computerSvcSpy.saveComputer.and.returnValue(
+      throwError(() => 'error al guardar')
+    );
+
+    expect(component.createComputer()).toThrowError;
   });
 });
