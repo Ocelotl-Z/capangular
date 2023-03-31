@@ -8,6 +8,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { of, throwError } from 'rxjs';
+import { LoginResponse } from '../model/login.model';
+import { Router } from '@angular/router';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -21,11 +24,13 @@ describe('LoginComponent', () => {
     'login',
   ]);
 
+  let routerSpy = jasmine.createSpyObj<Router>('Router', ['navigate']);
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [LoginComponent],
       imports: [
-        RouterTestingModule,
+        RouterTestingModule.withRoutes([{ path: 'home', redirectTo: '' }]),
         MatInputModule,
         MatButtonModule,
         ReactiveFormsModule,
@@ -34,6 +39,7 @@ describe('LoginComponent', () => {
       providers: [
         { provide: LoginService, useValue: loginSvcSpy },
         { provide: UtilService, useValue: utilSvcSpy },
+        { provide: Router, useValue: routerSpy },
       ],
     }).compileComponents();
 
@@ -44,5 +50,31 @@ describe('LoginComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+    expect(component.formLogin).toBeTruthy();
+  });
+
+  it('should do login', () => {
+    const mockResponse: LoginResponse = {
+      token: 'HolaSoyUnToken',
+    };
+    loginSvcSpy.login.and.returnValue(of(mockResponse));
+
+    component.formLogin?.patchValue({
+      email: 'sample@email.com',
+      password: 'holasoyunpassword',
+    });
+
+    component.loginClick();
+
+    expect(utilSvcSpy.saveToken).toHaveBeenCalledWith('HolaSoyUnToken');
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['home']);
+  });
+
+  it('should dont login', () => {
+    loginSvcSpy.login.and.returnValue(throwError(() => 'user not found'));
+
+    component.loginClick();
+
+    expect(component.isLoading).toBeFalse();
   });
 });

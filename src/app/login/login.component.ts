@@ -20,8 +20,8 @@ export class LoginComponent {
     private util: UtilService
   ) {
     this.formLogin = this.formBuilder.group({
-      email: ['', Validators.required, Validators.email],
-      password: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
     });
   }
 
