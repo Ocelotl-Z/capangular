@@ -48,9 +48,6 @@ describe('NewComputersComponent', () => {
   });
 
   it('should create Computer', () => {
-    const mockResponse = {
-      token: 'HolaSoyUnToken',
-    };
     computerSvcSpy.saveComputer.and.returnValue(of([]));
 
     component.formComputer?.patchValue({

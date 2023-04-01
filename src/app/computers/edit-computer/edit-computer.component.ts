@@ -28,7 +28,7 @@ export class EditComputerComponent {
             this.loadData(data);
           },
           error: (err) => {
-            alert('No se encontro el producto');
+            this.router.navigate(['/computers']);
           },
         });
       },

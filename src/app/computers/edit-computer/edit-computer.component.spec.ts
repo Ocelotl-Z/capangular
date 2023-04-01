@@ -25,12 +25,12 @@ describe('EditComputerComponent', () => {
     'params',
   ]);
 
-  let routerSpy = jasmine.createSpyObj<Router>('Router', ['navigate']);
+  let routerSvcSpy = jasmine.createSpyObj<Router>('Router', ['navigate']);
 
-  activeRouteSpy.params = NEVER;
-
+  activeRouteSpy.params = of({ id: 2 });
 
   beforeEach(async () => {
+    spyOn(window, 'alert');
     await TestBed.configureTestingModule({
       declarations: [EditComputerComponent],
       imports: [
@@ -42,9 +42,12 @@ describe('EditComputerComponent', () => {
         MatIconModule,
       ],
       providers: [
-        { provide: ComputerService, useValue: computerSvcSpy },
+        {
+          provide: ComputerService,
+          useValue: computerSvcSpy,
+        },
         { provide: ActivatedRoute, useValue: activeRouteSpy },
-        { provide: Router, useValue: routerSpy },
+        { provide: Router, useValue: routerSvcSpy },
       ],
     }).compileComponents();
 
@@ -60,44 +63,41 @@ describe('EditComputerComponent', () => {
   it('should load data', () => {
     activeRouteSpy.params = of({ id: 1 });
 
-    const fixture = TestBed.createComponent(EditComputerComponent);
-    const app = fixture.componentInstance;
-
     const computer: Computer = { id: 1, brand: 'Asus', model: 'A7' };
 
     computerSvcSpy.getByID.and.returnValue(of(computer));
 
-    app.loadData(computer);
+    component.formComputer?.patchValue(computer);
 
-    expect(app.computer).toBe(computer);
-    expect(app.formComputer).toBeTruthy();
+    component.loadData(computer);
+
+    expect(component.computer).toBe(computer);
+    expect(component.formComputer).toBeTruthy();
   });
 
   it('should dont load data', () => {
-    activeRouteSpy.params = NEVER;
-
-    const fixture2 = TestBed.createComponent(EditComputerComponent);
-    const app2 = fixture2.componentInstance;
+    activeRouteSpy.params = of({ id: 2 });
 
     computerSvcSpy.getByID.and.returnValue(
-      throwError(() => 'computer nor found')
+      throwError(() => 'ERROR' + component.computerId)
     );
 
-    expect(app2.computer).toBeFalsy();
-    expect(app2.formComputer).toBeFalsy();
+    expect(routerSvcSpy.navigate).toHaveBeenCalledWith(['/computers']);
   });
 
   it('should update computer', () => {
+    activeRouteSpy.params = of({ id: 3 });
     computerSvcSpy.patchComputer.and.returnValue(of([]));
     component.updateComputer();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/computers']);
+    expect(routerSvcSpy.navigate).toHaveBeenCalledWith(['/computers']);
   });
 
   it('should dont update', () => {
+    activeRouteSpy.params = of({ id: 4 });
     computerSvcSpy.patchComputer.and.returnValue(
       throwError(() => 'error al hacer update')
     );
     component.updateComputer();
-    expect(component.updateComputer()).toThrowError;
+    expect(window.alert).toHaveBeenCalled();
   });
 });
