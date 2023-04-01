@@ -16,10 +16,7 @@ describe('EditComputerComponent', () => {
   let component: EditComputerComponent;
   let fixture: ComponentFixture<EditComputerComponent>;
 
-  let computerSvcSpy = jasmine.createSpyObj<ComputerService>(
-    'ComputerService',
-    ['getByID', 'patchComputer']
-  );
+  let computerSvcSpy: jasmine.SpyObj<ComputerService>;
 
   let activeRouteSpy = jasmine.createSpyObj<ActivatedRoute>('ActivatedRoute', [
     'params',
@@ -31,6 +28,11 @@ describe('EditComputerComponent', () => {
 
   beforeEach(async () => {
     spyOn(window, 'alert');
+
+    computerSvcSpy = jasmine.createSpyObj<ComputerService>('ComputerService', [
+      'getByID',
+      'patchComputer',
+    ]);
     await TestBed.configureTestingModule({
       declarations: [EditComputerComponent],
       imports: [
